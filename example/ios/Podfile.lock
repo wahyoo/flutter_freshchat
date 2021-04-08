@@ -1,28 +1,33 @@
 PODS:
-  - Flutter (1.0.0)
-  - flutter_freshchat (0.0.4):
+  - Flutter (2.0.0)
+  - flutter_freshchat (0.0.5):
     - Flutter
+    - FreshchatSDK
+  - FreshchatSDK (4.1.5)
   - path_provider (0.0.1):
     - Flutter
 
 DEPENDENCIES:
-  - Flutter (from `.symlinks/flutter/ios`)
   - flutter_freshchat (from `.symlinks/plugins/flutter_freshchat/ios`)
   - path_provider (from `.symlinks/plugins/path_provider/ios`)
 
+SPEC REPOS:
+  trunk:
+    - Flutter
+    - FreshchatSDK
+
 EXTERNAL SOURCES:
-  Flutter:
-    :path: ".symlinks/flutter/ios"
   flutter_freshchat:
     :path: ".symlinks/plugins/flutter_freshchat/ios"
   path_provider:
     :path: ".symlinks/plugins/path_provider/ios"
 
 SPEC CHECKSUMS:
-  Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
-  flutter_freshchat: 6c8631baa242ca51e03fdb86c48db031429527d4
+  Flutter: 1c17b7bc8cd10f9f85f9dbc56caee3074756daad
+  flutter_freshchat: fb0f843fcb3c6b213e07ba88359ffd12d23702df
+  FreshchatSDK: 1adb29663cd1b31720173783110e24af793c373e
   path_provider: f96fff6166a8867510d2c25fdcc346327cc4b259
 
-PODFILE CHECKSUM: ebd43b443038e611b86ede96e613bd6033c49497
+PODFILE CHECKSUM: d231b65d6bea6d24555f84ca7901720538b5791f
 
-COCOAPODS: 1.8.4
+COCOAPODS: 1.10.1
