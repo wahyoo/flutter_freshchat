@@ -1,8 +1,7 @@
 part of freshchat;
 
 class FlutterFreshchat {
-  static const MethodChannel _channel =
-      const MethodChannel('flutter_freshchat');
+  static const MethodChannel _channel = MethodChannel('flutter_freshchat');
 
   /// Initialize the Freshchat app with `appID` and `appKey` which you could get from here:
   /// [Where to find App ID and App Key](https://support.freshchat.com/support/solutions/articles/229192)
@@ -27,9 +26,9 @@ class FlutterFreshchat {
   /// `notificationSoundEnabled` property is used enabled or disable in-app notfication
   /// sound. It default value is set to `true`. (NOTE: IOS only).
   static Future<bool> init({
-    @required String appID,
-    @required String appKey,
-    @required String domain,
+    required String appID,
+    required String appKey,
+    required String domain,
     bool cameraEnabled = true,
     bool gallerySelectionEnabled = true,
     bool teamMemberInfoVisible = true,
@@ -37,7 +36,7 @@ class FlutterFreshchat {
     bool showNotificationBanner = true,
     bool notificationSoundEnabled = true,
   }) async {
-    final Map<String, dynamic> params = <String, dynamic> {
+    final Map<String, dynamic> params = <String, dynamic>{
       'appID': appID,
       'appKey': appKey,
       'domain': domain,
@@ -48,9 +47,9 @@ class FlutterFreshchat {
       'showNotificationBanner': showNotificationBanner,
       'notificationSoundEnabled': notificationSoundEnabled,
     };
-    final bool result = await _channel.invokeMethod('init', params);
 
-    return result;
+    final bool? result = await _channel.invokeMethod('init', params);
+    return result ?? false;
   }
 
   /// Update the user info by setting by creating a `FreshchatUser` object
@@ -62,16 +61,14 @@ class FlutterFreshchat {
   /// customProperties["loggedIn"] = "true";
   /// ```
   static Future<bool> updateUserInfo({
-    @required FreshchatUser user,
-    Map<String, String> customProperties,
+    required FreshchatUser user,
+    Map<String, String>? customProperties,
   }) async {
-    Map<String, dynamic> json = user.toJson();
-
+    final Map<String, dynamic> json = user.toJson();
     json['custom_property_list'] = customProperties;
 
-    final bool result = await _channel.invokeMethod('updateUserInfo', json);
-
-    return result;
+    final bool? result = await _channel.invokeMethod('updateUserInfo', json);
+    return result ?? false;
   }
 
   /// Identify the user user by usin email address or any way you uniquely
@@ -79,25 +76,24 @@ class FlutterFreshchat {
   ///
   /// `externalID` is required and returns a `restoreID` you can save it
   /// and use to restore the chats messages.
-  static Future<String> identifyUser({
-    @required String externalID,
-    String restoreID,
+  static Future<String?> identifyUser({
+    required String externalID,
+    String? restoreID,
   }) async {
     final Map<String, String> params = <String, String>{
-      "externalID": externalID,
-      "restoreID": restoreID != null ? restoreID : ""
+      'externalID': externalID,
+      'restoreID': restoreID ?? ''
     };
 
-    final String result = await _channel.invokeMethod("identifyUser", params);
-
+    final String? result = await _channel.invokeMethod('identifyUser', params);
     return result;
   }
 
   /// Reset user data at logout or when deemed appropriate based on user action
   /// in the app.
   static Future<bool> resetUser() async {
-    final bool result = await _channel.invokeMethod('reset');
-    return result;
+    final bool? result = await _channel.invokeMethod('reset');
+    return result ?? false;
   }
 
   /// Show conversation opens a conversation screen and also list all the other
@@ -105,17 +101,18 @@ class FlutterFreshchat {
   ///
   /// You can also pass a title for the chat screen.
   static Future<bool> showConversations({
-    List<String> tags = const [],
-    String title,
+    List<String> tags = const <String>[],
+    String? title,
   }) async {
     final Map<String, dynamic> params = <String, dynamic>{
-      "tags": tags,
-      "title": title
+      'tags': tags,
+      'title': title
     };
-    final bool result =
+
+    final bool? result =
         await _channel.invokeMethod('showConversations', params);
 
-    return result;
+    return result ?? false;
   }
 
   /// ShowFAQs opens a FAQ screen in a grid like format as default you can change
@@ -127,42 +124,40 @@ class FlutterFreshchat {
     bool showContactUsOnFaqNotHelpful = false,
   }) async {
     final Map<String, dynamic> params = <String, dynamic>{
-      "showFaqCategoriesAsGrid": showFaqCategoriesAsGrid,
-      "showContactUsOnAppBar": showContactUsOnAppBar,
-      "showContactUsOnFaqScreens": showContactUsOnFaqScreens,
-      "showContactUsOnFaqNotHelpful": showContactUsOnFaqNotHelpful
+      'showFaqCategoriesAsGrid': showFaqCategoriesAsGrid,
+      'showContactUsOnAppBar': showContactUsOnAppBar,
+      'showContactUsOnFaqScreens': showContactUsOnFaqScreens,
+      'showContactUsOnFaqNotHelpful': showContactUsOnFaqNotHelpful
     };
 
-    final bool result = await _channel.invokeMethod('showFAQs', params);
+    final bool? result = await _channel.invokeMethod('showFAQs', params);
 
-    return result;
+    return result ?? false;
   }
 
   /// Gets the unseen message count from freshchat you can use this to show a counter.
-  static Future<int> getUnreadMsgCount() async {
-    final int result = await _channel.invokeMethod('getUnreadMsgCount');
+  static Future<int?> getUnreadMsgCount() async {
+    final int? result = await _channel.invokeMethod('getUnreadMsgCount');
     return result;
   }
 
   /// Setup Push notification for freshchat by passing `token` to the methd.
-  static Future<bool> setupPushNotifications({@required String token}) async {
-    final Map<String, dynamic> params = <String, dynamic>{"token": token};
+  static Future<bool> setupPushNotifications({required String token}) async {
+    final Map<String, dynamic> params = <String, dynamic>{'token': token};
 
-    final bool result =
+    final bool? result =
         await _channel.invokeMethod('setupPushNotifications', params);
-
-    return result;
+    return result ?? false;
   }
 
   /// Send message
-  static Future<bool> send({@required String message, String tag}) async {
+  static Future<bool> send({required String message, String? tag}) async {
     final Map<String, dynamic> params = <String, dynamic>{
-      "message": message,
-      "tag": tag
+      'message': message,
+      'tag': tag
     };
 
-    final bool result = await _channel.invokeMethod('send', params);
-
-    return result;
+    final bool? result = await _channel.invokeMethod('send', params);
+    return result ?? false;
   }
 }

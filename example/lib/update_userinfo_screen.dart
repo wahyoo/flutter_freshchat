@@ -10,26 +10,26 @@ class UpdateUserInfoScreen extends StatefulWidget {
 }
 
 class UpdateUserInfoState extends State<UpdateUserInfoScreen> {
-  final formKey = GlobalKey<FormState>();
-  final scaffoldKey = GlobalKey<ScaffoldState>();
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
   final LocalStorage storage = LocalStorage('example_storage');
 
-  String _firstName = "";
-  String _lastName = "";
-  String _email = "";
-  String _countryCode = "";
-  String _phone = "";
+  String _firstName = '';
+  String _lastName = '';
+  String _email = '';
+  String _countryCode = '';
+  String _phone = '';
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       key: scaffoldKey,
       appBar: AppBar(
-        title: Text("Update User Info"),
+        title: const Text('Update User Info'),
       ),
       body: Container(
-        padding: EdgeInsets.all(10.0),
-        height: 500,
+        padding: const EdgeInsets.all(10.0),
+        height: 500.0,
         width: MediaQuery.of(context).size.width,
         child: Form(
           key: formKey,
@@ -37,42 +37,48 @@ class UpdateUserInfoState extends State<UpdateUserInfoScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[
               TextFormField(
-                decoration: InputDecoration(
-                    hintText: 'xyz', labelText: 'Enter Firstname'),
-                onSaved: (value) {
-                  this._firstName = value;
+                decoration: const InputDecoration(
+                  hintText: 'xyz',
+                  labelText: 'Enter Firstname',
+                ),
+                onSaved: (String? value) {
+                  _firstName = value ?? '';
                 },
-                validator: (value) {
-                  if (value.isEmpty) {
-                    return "Please enter some text";
+                validator: (String? value) {
+                  if (value != null && value.isEmpty) {
+                    return 'Please enter some text';
                   }
                   return null;
                 },
               ),
               TextFormField(
-                decoration: InputDecoration(
-                    hintText: 'xyz', labelText: 'Enter Lastname'),
-                onSaved: (value) {
-                  this._lastName = value;
+                decoration: const InputDecoration(
+                  hintText: 'xyz',
+                  labelText: 'Enter Lastname',
+                ),
+                onSaved: (String? value) {
+                  _lastName = value ?? '';
                 },
-                validator: (value) {
-                  if (value.isEmpty) {
-                    return "Please enter some text";
+                validator: (String? value) {
+                  if (value != null && value.isEmpty) {
+                    return 'Please enter some text';
                   }
+
                   return null;
                 },
               ),
               TextFormField(
-                decoration: InputDecoration(
-                    hintText: 'xyz@test.com',
-                    labelText: 'Enter Email address'),
-                onSaved: (value) {
+                decoration: const InputDecoration(
+                  hintText: 'xyz@test.com',
+                  labelText: 'Enter Email address',
+                ),
+                onSaved: (String? value) {
                   print(value);
-                  this._email = value;
+                  _email = value ?? '';
                 },
-                validator: (value) {
-                  if (value.isEmpty) {
-                    return "Please enter some text";
+                validator: (String? value) {
+                  if (value != null && value.isEmpty) {
+                    return 'Please enter some text';
                   }
                   return null;
                 },
@@ -83,34 +89,36 @@ class UpdateUserInfoState extends State<UpdateUserInfoScreen> {
                 children: <Widget>[
                   Flexible(
                     child: TextFormField(
-                      decoration: InputDecoration(
-                          hintText: '+91', labelText: 'Country Code'),
-                      onSaved: (value) {
-                        this._countryCode = value;
+                      decoration: const InputDecoration(
+                        hintText: '+91',
+                        labelText: 'Country Code',
+                      ),
+                      onSaved: (String? value) {
+                        _countryCode = value ?? '';
                       },
-                      validator: (value) {
-                        if (value.isEmpty) {
-                          return "Please enter some text";
-                        } else if (value.length < 2) {
-                          return "Please enter 3 characters";
+                      validator: (String? value) {
+                        if (value != null && value.isEmpty) {
+                          return 'Please enter some text';
+                        } else if (value != null && value.length < 2) {
+                          return 'Please enter 3 characters';
                         }
                         return null;
                       },
                     ),
                   ),
-                  SizedBox(
-                    width: 20.0,
-                  ),
+                  const SizedBox(width: 20.0),
                   Flexible(
                     child: TextFormField(
-                      decoration: InputDecoration(
-                          hintText: '0123456789', labelText: 'Phone Number'),
-                      onSaved: (value) {
-                        this._phone = value;
+                      decoration: const InputDecoration(
+                        hintText: '0123456789',
+                        labelText: 'Phone Number',
+                      ),
+                      onSaved: (String? value) {
+                        _phone = value ?? '';
                       },
-                      validator: (value) {
-                        if (value.isEmpty) {
-                          return "Please enter some text";
+                      validator: (String? value) {
+                        if (value != null && value.isEmpty) {
+                          return 'Please enter some text';
                         }
                         return null;
                       },
@@ -120,12 +128,12 @@ class UpdateUserInfoState extends State<UpdateUserInfoScreen> {
               ),
               RaisedButton(
                 onPressed: () async {
-                  if (formKey.currentState.validate()) {
-                    formKey.currentState.save();
+                  if (formKey.currentState?.validate() ?? false) {
+                    formKey.currentState?.save();
 
-                    await storage.setItem('uid', this._email);
+                    await storage.setItem('uid', _email);
 
-                    FreshchatUser user = FreshchatUser.initial();
+                    final FreshchatUser user = FreshchatUser.initial();
                     user.email = _email;
                     user.firstName = _firstName;
                     user.lastName = _lastName;
@@ -134,11 +142,11 @@ class UpdateUserInfoState extends State<UpdateUserInfoScreen> {
 
                     await FlutterFreshchat.updateUserInfo(user: user);
 
-                    scaffoldKey.currentState
-                        .showSnackBar(SnackBar(content: Text("Clicked")));
+                    scaffoldKey.currentState?.showSnackBar(
+                        const SnackBar(content: Text('Clicked')));
                   }
                 },
-                child: Text("submit"),
+                child: const Text('submit'),
               )
             ],
           ),

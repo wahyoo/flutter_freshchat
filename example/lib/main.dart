@@ -1,8 +1,10 @@
-import 'package:flutter/material.dart';
 import 'dart:async';
-import 'update_userinfo_screen.dart';
-import 'package:localstorage/localstorage.dart';
+
+import 'package:flutter/material.dart';
 import 'package:flutter_freshchat/flutter_freshchat.dart';
+import 'package:localstorage/localstorage.dart';
+
+import 'update_userinfo_screen.dart';
 
 void main() => runApp(MyApp());
 
@@ -12,26 +14,33 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  final scaffoldKey = GlobalKey<ScaffoldState>();
-  List<Item> items = [
+  final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+
+  List<Item> items = <Item>[
     Item(
         text: 'Update User Info',
-        onTap: (context) {
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => UpdateUserInfoScreen()));
+        onTap: (BuildContext context) {
+          Navigator.push<void>(
+            context,
+            MaterialPageRoute<void>(
+                builder: (BuildContext context) => UpdateUserInfoScreen()),
+          );
         }),
     Item(
         text: 'Identify User',
-        onTap: (context) async {
-          LocalStorage storage = LocalStorage('example_storage');
+        onTap: (BuildContext context) async {
+          final LocalStorage storage = LocalStorage('example_storage');
           //Navigate to update email ID and name screen
-          String uid = await storage.getItem('uid');
-          String restoreId = await storage.getItem('restoreId');
+          final String? uid = await storage.getItem('uid') as String?;
+          final String? restoreId =
+              await storage.getItem('restoreId') as String?;
+
           if (uid == null) {
             Scaffold.of(context).showSnackBar(
-                SnackBar(content: Text("Please update the user info")));
+              const SnackBar(content: Text('Please update the user info')),
+            );
           } else if (restoreId == null) {
-            String newRestoreId =
+            final String? newRestoreId =
                 await FlutterFreshchat.identifyUser(externalID: uid);
             await storage.setItem('restoreId', newRestoreId);
           } else {
@@ -41,29 +50,29 @@ class _MyAppState extends State<MyApp> {
         }),
     Item(
         text: 'Show Conversation',
-        onTap: (context) async {
+        onTap: (BuildContext context) async {
           await FlutterFreshchat.showConversations();
         }),
     Item(
         text: 'Show FAQs',
-        onTap: (context) async {
+        onTap: (BuildContext context) async {
           await FlutterFreshchat.showFAQs();
         }),
     Item(
         text: 'Get Unread Message Count',
-        onTap: (context) async {
-          dynamic val = await FlutterFreshchat.getUnreadMsgCount();
+        onTap: (BuildContext context) async {
+          final int? val = await FlutterFreshchat.getUnreadMsgCount();
           Scaffold.of(context)
-              .showSnackBar(SnackBar(content: Text("Message count $val")));
+              .showSnackBar(SnackBar(content: Text('Message count $val')));
         }),
     Item(
         text: 'Setup Notifications',
-        onTap: () {
-          //Navigate to update email ID and name screen
+        onTap: (_) {
+          // Navigate to update email ID and name screen
         }),
     Item(
         text: 'Reset User',
-        onTap: (context) async {
+        onTap: (BuildContext context) async {
           await FlutterFreshchat.resetUser();
         }),
   ];
@@ -76,9 +85,9 @@ class _MyAppState extends State<MyApp> {
 
   Future<void> initPlatformState() async {
     await FlutterFreshchat.init(
-      appID: "YOUR_API_KEY_HERE",
-      appKey: "YOUR_APP_KEY_HERE",
-      domain: "YOUR_APP_DOMAIN_HERE",
+      appID: 'YOUR_API_KEY_HERE',
+      appKey: 'YOUR_APP_KEY_HERE',
+      domain: 'YOUR_APP_DOMAIN_HERE',
     );
   }
 
@@ -92,7 +101,7 @@ class _MyAppState extends State<MyApp> {
         ),
         body: ListView.builder(
           padding: const EdgeInsets.all(10.0),
-          itemBuilder: (context, i) {
+          itemBuilder: (BuildContext context, int i) {
             return ListItem(
               item: items[i].text,
               onTap: () => items[i].onTap(context),
@@ -106,10 +115,10 @@ class _MyAppState extends State<MyApp> {
 }
 
 class ListItem extends StatelessWidget {
-  final String item;
-  final Function onTap;
+  const ListItem({required this.item, required this.onTap});
 
-  ListItem({@required this.item, @required this.onTap});
+  final String item;
+  final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -117,13 +126,11 @@ class ListItem extends StatelessWidget {
       onTap: onTap,
       child: Card(
         child: Container(
-          padding: EdgeInsets.all(8.0),
+          padding: const EdgeInsets.all(8.0),
           child: Row(
             children: <Widget>[
-              new CircleAvatar(
-                child: Text('A'),
-              ),
-              Padding(padding: EdgeInsets.only(right: 10.0)),
+              const CircleAvatar(child: Text('A')),
+              const Padding(padding: EdgeInsets.only(right: 10.0)),
               Text(item)
             ],
           ),
@@ -134,11 +141,8 @@ class ListItem extends StatelessWidget {
 }
 
 class Item {
-  String text;
-  Function onTap;
+  Item({required this.text, required this.onTap});
 
-  Item({@required String text, @required Function onTap}) {
-    this.text = text;
-    this.onTap = onTap;
-  }
+  String text;
+  Function(BuildContext context) onTap;
 }
